@@ -1,4 +1,4 @@
-plugins {
+subproject {
     id 'java'
     id 'idea'
     id 'application'
