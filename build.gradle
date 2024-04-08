@@ -9,6 +9,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'application'
+}
 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
@@ -53,7 +54,5 @@ cyclonedxBom {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
-
-}
 
 
