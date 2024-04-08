@@ -16,16 +16,16 @@ subprojects {
         mavenCentral()
     }
 
-    jar {
-        manifest {
-            attributes("Implementation-Title": "Gradle")
-        }
-    }
-
     dependencies {
-        compile(
-                'com.bladejava:blade-mvc:2.0.12.ALPHA'
-        )
+    // Use implementation instead of compile
+    implementation 'com.bladejava:blade-mvc:2.0.12.ALPHA'
+}
+
+jar {
+    manifest {
+        attributes("Implementation-Title": "Gradle")
+    }
+}
 
         testCompile(
                 "junit:junit:4.12"
