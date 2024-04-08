@@ -35,16 +35,15 @@ subprojects {
                 'com.bladejava:blade-mvc:2.0.12.ALPHA'
         )
         cyclonedxBom {
-    
-         projectType = "application"
-         schemaVersion = "1.5"
-         destination = file("build/reports")
-         outputName = "bom"
-         outputFormat = "xml"
-         includeBomSerialNumber = false
-         includeLicenseText = false
-         componentVersion = "2.0.0"
-      }
+            projectType = "application"
+            schemaVersion = "1.5"
+            destination = file("build/reports")
+            outputName = "bom"
+            outputFormat = "xml"
+            includeBomSerialNumber = false
+            includeLicenseText = false
+            componentVersion = "2.0.0"
+        }
 
         testCompile(
                 "junit:junit:4.12"
@@ -56,5 +55,4 @@ subprojects {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
-
 }
