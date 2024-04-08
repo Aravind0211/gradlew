@@ -5,18 +5,16 @@ def libPath = 'build/libs/lib'
 sourceSets {
     main {
         resources {
-            exclude '**/*' // Corrected exclude pattern
+            exclude '*'
         }
     }
 }
 
 jar {
     manifest {
-        attributes(
-            'Main-Class': mainClassName,
-            'Built-By': 'biezhi',
-            'Class-Path': configurations.runtime.files.collect { 'lib/'+it.getName() }.join(' ')
-        )
+        attributes 'Main-Class': mainClassName
+        attributes 'Built-By': 'biezhi'
+        attributes 'Class-Path': 'resources/ ' + configurations.compile.collect { 'lib/'+it.getName() }.join(' ')
     }
 }
 
@@ -33,5 +31,3 @@ task copyResources(type: Copy) {
     from 'src/main/resources'
     into('build/libs/resources')
 }
-
-task release(type: Copy, dependsOn: [build, clearJar, copyJar, copyResources])
