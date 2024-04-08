@@ -9,6 +9,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'application'
+    apply plugin: 'org.cyclonedx.bom' version '1.8.2'
 
     version = '1.0'
 
@@ -33,6 +34,17 @@ subprojects {
         compile(
                 'com.bladejava:blade-mvc:2.0.12.ALPHA'
         )
+        cyclonedxBom {
+    
+         projectType = "application"
+         schemaVersion = "1.5"
+         destination = file("build/reports")
+         outputName = "bom"
+         outputFormat = "xml"
+         includeBomSerialNumber = false
+         includeLicenseText = false
+         componentVersion = "2.0.0"
+      }
 
         testCompile(
                 "junit:junit:4.12"
