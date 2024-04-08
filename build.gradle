@@ -30,7 +30,6 @@ jar {
         testCompile(
                 "junit:junit:4.12"
         )
-    }
 
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
