@@ -5,16 +5,18 @@ def libPath = 'build/libs/lib'
 sourceSets {
     main {
         resources {
-            exclude '*'
+            exclude '**/*' // Corrected exclude pattern
         }
     }
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': mainClassName
-        attributes 'Built-By': 'biezhi'
-        attributes 'Class-Path': 'resources/ ' + configurations.compile.collect { 'lib/'+it.getName() }.join(' ')
+        attributes(
+            'Main-Class': mainClassName,
+            'Built-By': 'biezhi',
+            'Class-Path': configurations.runtime.files.collect { 'lib/'+it.getName() }.join(' ')
+        )
     }
 }
 
