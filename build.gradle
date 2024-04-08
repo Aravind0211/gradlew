@@ -6,12 +6,10 @@
  */
 plugins {
     id 'org.cyclonedx.bom' version '1.8.2'
-}
+    id 'java'
+    id 'idea'
+    id 'application'
 
-subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'application'
     
 
     version = '1.0'
