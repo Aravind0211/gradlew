@@ -1,33 +1,41 @@
-subproject {
-    id 'java'
-    id 'idea'
-    id 'application'
-}
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'application'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+    version = '1.0'
 
-[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
+    // java编译的时候缺省状态下会因为中文字符而失败
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
-dependencies {
-    implementation 'com.bladejava:blade-mvc:2.0.12-alpha'
-    testImplementation 'junit:junit:4.12'
-}
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
 
-jar {
-    archivesBaseName = 'gradle-hello'
-    manifest {
-        attributes(
-            "Implementation-Title": "Gradle"
+    jar {
+        manifest {
+            attributes("Implementation-Title": "Gradle")
+        }
+    }
+
+    dependencies {
+        compile(
+                'com.bladejava:blade-mvc:2.0.12.ALPHA'
+        )
+
+        testCompile(
+                "junit:junit:4.12"
         )
     }
-}
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs.addAll(["-Xlint:unchecked", "-Xlint:deprecation"])
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+
 }
