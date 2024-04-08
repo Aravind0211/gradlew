@@ -4,6 +4,8 @@ plugins {
     id 'application'
 }
 
+archivesBaseName = 'gradle-hello'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
