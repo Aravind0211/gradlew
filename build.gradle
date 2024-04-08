@@ -4,8 +4,6 @@ plugins {
     id 'application'
 }
 
-archivesBaseName = 'gradle-hello'
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -16,17 +14,18 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation 'com.bladejava:blade-mvc:2.0.12-alpha'
+    testImplementation 'junit:junit:4.12'
+}
+
 jar {
+    archivesBaseName = 'gradle-hello'
     manifest {
         attributes(
             "Implementation-Title": "Gradle"
         )
     }
-}
-
-dependencies {
-    implementation 'com.bladejava:blade-mvc:2.0.12-alpha'
-    testImplementation 'junit:junit:4.12'
 }
 
 tasks.withType(JavaCompile) {
