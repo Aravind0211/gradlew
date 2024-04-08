@@ -5,7 +5,7 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 plugins {
-	id 'org.cyclonedx.bom' version '1.8.2'
+	
     id 'java'
     id 'idea'
     id 'application'
@@ -21,17 +21,7 @@ plugins {
         mavenLocal()
         mavenCentral()
     }
-cyclonedxBom {
-    
-    projectType = "application"
-    schemaVersion = "1.5"
-    destination = file("build/reports")
-    outputName = "bom"
-    outputFormat = "xml"
-    includeBomSerialNumber = false
-    includeLicenseText = false
-    componentVersion = "2.0.0"
-}
+
     
     jar {
         manifest {
