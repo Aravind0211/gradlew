@@ -45,8 +45,8 @@ cyclonedxBom {
     }
 
     /*dependencies {
-        compile(
-                'com.bladejava:blade-mvc:2.0.12.ALPHA'
+       * compile(
+                *'com.bladejava:blade-mvc:2.0.12.ALPHA'
         )*/
 
         testCompile(
