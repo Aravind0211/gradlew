@@ -2,7 +2,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'application'
-   apply plugin: 'org.cyclonedx.bom'
+    apply plugin: 'org.cyclonedx.bom' // Corrected line
 
     version = '1.0'
 
@@ -16,29 +16,19 @@ subprojects {
         mavenLocal()
         mavenCentral()
     }
-cyclonedxBom {
- includeConfigs = ["runtimeClasspath"]
- projectType = "application"
- schemaVersion = "1.5"
- destination = file("build/reports")
- outputName = "bom"
- outputFormat = "xml"
- includeBomSerialNumber = false
- includeLicenseText = false
- componentVersion = "2.0.0"
-}
 
     jar {
         manifest {
             attributes("Implementation-Title": "Gradle")
         }
     }
+
     dependencies {
-       compile(
-                'com.bladejava:blade-mvc:2.0.12.ALPHA'
+        compile(
+            'com.bladejava:blade-mvc:2.0.12.ALPHA'
         )
-       testCompile(
-                "junit:junit:4.12"
+        testCompile(
+            "junit:junit:4.12"
         )
     }
 
@@ -47,4 +37,16 @@ cyclonedxBom {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
+}
+
+cyclonedxBom {
+    includeConfigs = ["runtimeClasspath"]
+    projectType = "application"
+    schemaVersion = "1.5"
+    destination = file("build/reports")
+    outputName = "bom"
+    outputFormat = "xml"
+    includeBomSerialNumber = false
+    includeLicenseText = false
+    componentVersion = "2.0.0"
 }
