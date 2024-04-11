@@ -2,7 +2,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'application'
-    apply plugin: 'org.cyclonedx.bom' // Corrected line
+    apply plugin: 'org.cyclonedx.bom' version '1.8.1'
 
     version = '1.0'
 
