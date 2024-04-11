@@ -43,6 +43,13 @@ cyclonedxBom {
             attributes("Implementation-Title": "Gradle")
         }
     }
+    dependencies {
+       compile(
+                'com.bladejava:blade-mvc:2.0.12.ALPHA'
+        )
+testCompile(
+                "junit:junit:4.12"
+        )
 
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
