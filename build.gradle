@@ -2,7 +2,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'application'
-   id 'org.cyclonedx.bom' version '1.8.1'
+   apply plugin: 'org.cyclonedx.bom'
 
     version = '1.0'
 
@@ -16,6 +16,17 @@ subprojects {
         mavenLocal()
         mavenCentral()
     }
+cyclonedxBom {
+ includeConfigs = ["runtimeClasspath"]
+ projectType = "application"
+ schemaVersion = "1.5"
+ destination = file("build/reports")
+ outputName = "bom"
+ outputFormat = "xml"
+ includeBomSerialNumber = false
+ includeLicenseText = false
+ componentVersion = "2.0.0"
+}
 
     jar {
         manifest {
