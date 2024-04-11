@@ -25,7 +25,7 @@ plugins {
         mavenLocal()
         mavenCentral()
     }
-    cyclonedxBom {
+cyclonedxBom {
  includeConfigs = ["runtimeClasspath"]
  projectType = "application"
  schemaVersion = "1.5"
