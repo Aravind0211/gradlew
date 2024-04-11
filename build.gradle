@@ -44,10 +44,10 @@ cyclonedxBom {
         }
     }
 
-    dependencies {
+    /*dependencies {
         compile(
                 'com.bladejava:blade-mvc:2.0.12.ALPHA'
-        )
+        )*/
 
         testCompile(
                 "junit:junit:4.12"
