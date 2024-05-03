@@ -1,0 +1,98 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Repo Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/integration']], extensions: [], userRemoteConfigs: [[credentialsId: 'facimatetoken', url: 'https://gitlab.com/logicfocus.in/facimate.git']])
+            }
+        }
+        stage('Build') {
+            steps {
+                sh './gradlew build'
+            }
+        }
+        stage('Unit Test'){
+            // tools{
+            //     jdk 'java-8'
+            // }
+            steps{
+                sh './gradlew test'
+            }
+        }
+        stage('Package'){
+            steps{
+               // sh './ gradlew releaseTar'
+                sh './gradlew cyclonedxBom'
+            }
+        }
+        stage("Static Analysis") {
+            tools {
+               jdk 'java-8'
+            }
+            environment {
+                scannerHome= tool 'SonarQube Scanner 4.8.0.2856'
+                projectName= "Aravinth"
+            }
+            steps {
+                withSonarQubeEnv('Sonar_12') {
+                   
+                    sh '''${scannerHome}/bin/sonar-scanner -Dsonar.java.binaries=build/classes/java \
+                    -Dsonar.projectKey=$projectName -Dsonar.sources=.'''
+                }
+            }
+        }
+        stage('Publish'){
+            steps{
+                nexusArtifactUploader artifacts: [[artifactId: 'Aravinth', classifier: '', file: '/home/logicfocus/.jenkins/workspace/Aravind/Aravinth/build/libs/facimate-services-1.0.jar', type: 'jar']], credentialsId: 'nexus1', groupId: 'com.logicfocus', nexusUrl: '192.168.1.30:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Aravinth', version: '1.0.1'
+            }
+        }
+        stage('Dependency Tracker'){
+            steps{
+                withCredentials([string(credentialsId: 'deptrack-api', variable: '${DEPTRACKER}')]) {
+                dependencyTrackPublisher artifact: '/home/logicfocus/.jenkins/workspace/Aravind/Aravinth/build/reports/bom.xml', autoCreateProjects: false, dependencyTrackApiKey: 'odt_CqAAWRarFqMKczrIV8liZLuyum9i2NIn', dependencyTrackFrontendUrl: 'http://192.168.1.30:8084', dependencyTrackUrl: 'http://192.168.1.30:8084', projectId: '2ac4e598-d8ae-4cec-b809-0834fcad5043', projectName: 'Aravinth', projectProperties: [group: 'com.logicfocus', parentId: 'b16c55b1-d3f3-4fc8-b4e1-7c4d9066e1f1', swidTagId: '1122', tags: ['tags']], projectVersion: '1.0.1', synchronous: true            
+                    
+                }
+            }
+        }
+        stage('Read Build Info') {
+            environment {
+                NEXUS_URL = 'http://192.168.1.30:8081'
+                REPO_NAME = 'Aravinth'
+                GROUP_ID = 'com.logicfocus'
+                ARTIFACT_ID = 'Aravinth'
+                
+            } 
+            steps {
+                script {
+                    def artifactPath = "/${REPO_NAME}/${GROUP_ID.replace('.', '/')}/${ARTIFACT_ID}/${VERSION}/${ARTIFACT_ID}-${VERSION}.jar"
+                    def nexusChecksumUrl = "${NEXUS_URL}/service/rest/v1/components?repository=${REPO_NAME}&group=${GROUP_ID}&name=${ARTIFACT_ID}&version=${VERSION}"
+                    def artifactInfo = sh(script: "curl -s -u admin:lfadmin ${nexusChecksumUrl}", returnStdout: true).trim()
+                    def checksumValue = readJSON(text: artifactInfo).items[0].assets[0].checksum.sha1
+
+                    sh """
+                        echo '{' > buildData.json
+                        echo '  "buildnumber": "${BUILD_NUMBER}",' >> buildData.json
+                        echo '  "buildurl": "${JOB_URL}",' >> buildData.json
+                        echo '  "group": "com.logicfocus",' >> buildData.json
+                        echo '  "checksum": "${checksumValue}",' >> buildData.json
+                        echo '  "artifact": "${ARTIFACT_ID}",' >> buildData.json
+                        echo '  "ext": "jar",' >> buildData.json
+                        echo '  "version": "${VERSION}"' >> buildData.json
+                        echo '}' >> buildData.json
+                    """
+                    stash name: 'buildDataStash', includes: 'buildData.json'
+                    unstash 'buildDataStash'
+                    def buildData = readFile('buildData.json')
+                    echo "Build Data: ${buildData}"
+                    archiveArtifacts artifacts: 'buildData.json', onlyIfSuccessful: false
+                }
+            }
+        }
+        stage('Mail Notification'){
+            steps{
+                mail bcc: '', body: 'This is my first facimate pipeline', cc: '', from: '', replyTo: '', subject: 'Aravinth Facimate', to: 'aravindthiru159@gmail.com'
+            }
+        }
+    }
+}
